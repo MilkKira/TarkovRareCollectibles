@@ -16,11 +16,11 @@ namespace TarkovRareCollectibles
 {
     public record ModMetadata : AbstractModMetadata
     {
-        public override string ModGuid { get; init; } = "com.yellowdoge.tarkovrarecollectibles";
-        public override string Name { get; init; } = "TarkovRareCollectibles";
-        public override string Author { get; init; } = "YellowDoge";
+        public override string ModGuid { get; init; } = "com.echo.tarkovrarecollectibles";
+        public override string Name { get; init; } = "RareCollectiblesRemake";
+        public override string Author { get; init; } = "YellowDoge + Milkkira";
         public override List<string>? Contributors { get; init; }
-        public override SemanticVersioning.Version Version { get; init; } = new("1.1.5");
+        public override SemanticVersioning.Version Version { get; init; } = new("1.2.0");
         public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0");
         public override List<string>? Incompatibilities { get; init; }
         public override Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; }
@@ -52,7 +52,7 @@ namespace TarkovRareCollectibles
             var hallofFameData = modHelper.GetJsonDataFromFile<Dictionary<string, string>>(pathToMod, @"db\Items\hallofFameData.json");
             var traderData = modHelper.GetJsonDataFromFile<Dictionary<string, Dictionary<string, bool>>>(pathToMod, @"db\Items\traderData.json");
 
-            logger.Info("[Tarkov Rare Collectibles] Start loading items");
+            logger.Info("[稀有收藏品重置版] Start loading items");
 
             var itemService = new DogeItemService(logger, database, configServer);
 
@@ -69,7 +69,7 @@ namespace TarkovRareCollectibles
             itemService.RemoveFromPMCLootPool(itemIdLookup);
 
             // This is where 
-            logger.Success("[Tarkov Rare Collectibles] Finished loading items");
+            logger.Success("[稀有收藏品重置版] Finished loading items");
             return Task.CompletedTask;
         }
     }

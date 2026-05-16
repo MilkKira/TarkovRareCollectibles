@@ -50,7 +50,9 @@ namespace TarkovRareCollectibles
             _database = database;
             _configServer = configServer;
         }
-
+        /**
+         * 添加静态容器掠夺
+         */
         public void AddToStaticLoot(Dictionary<string, Dictionary<string, Dictionary<string, double>>> staticLootData, double staticLootMultiplier)
         {
             var lootChangesByMap = new Dictionary<string, List<(MongoId ContainerId, ItemDistribution Item)>>();
@@ -70,7 +72,7 @@ namespace TarkovRareCollectibles
                     {
                         if (!ConstantsContainer.containerLookup.TryGetValue(containerName, out string? containerId))
                         {
-                            _logger.Warning($"Container {containerName} not found in containerLookup");
+                            _logger.Warning($"[稀有收藏品重置版] Container {containerName} not found in containerLookup");
                             continue;
                         }
 
@@ -79,14 +81,14 @@ namespace TarkovRareCollectibles
                         if (!ConstantsContainer.containerTotalProbability.TryGetValue(mapName, out var mapProbs) ||
                             !mapProbs.TryGetValue(containerName, out double totalProbability))
                         {
-                            _logger.Warning($"containerTotalProbability not found for container {containerId} in map {mapName}");
+                            _logger.Warning($"[稀有收藏品重置版] containerTotalProbability not found for container {containerId} in map {mapName}");
                             continue;
                         }
 
                         double calculatedSpawnProbability = spawnProbability * staticLootMultiplier;
                         if (calculatedSpawnProbability >= 0.25)
                         {
-                            _logger.Warning($"Force spawnProbability=0.25 for item {itemId} on {mapName}:{containerName}");
+                            _logger.Warning($"[稀有收藏品重置版] Force spawnProbability=0.25 for item {itemId} on {mapName}:{containerName}");
                             calculatedSpawnProbability = 0.25;
                         }
 
@@ -95,7 +97,7 @@ namespace TarkovRareCollectibles
 
                         if (relativeProbability <= 0)
                         {
-                            _logger.Warning($"Skipping {itemId} for {containerName} ({mapName}) — relProb={relativeProbability}");
+                            _logger.Warning($"[稀有收藏品重置版] Skipping {itemId} for {containerName} ({mapName}) — relProb={relativeProbability}");
                             continue;
                         }
 
@@ -119,7 +121,7 @@ namespace TarkovRareCollectibles
                 Location location = _database.Locations.GetDictionary()[propertyMapName];
                 if (location.StaticLoot == null)
                 {
-                    _logger.Warning($"StaticLoot is null for {propertyMapName}");
+                    _logger.Warning($"[稀有收藏品重置版] StaticLoot is null for {propertyMapName}");
                     continue;
                 }
 
@@ -132,7 +134,7 @@ namespace TarkovRareCollectibles
                     {
                         if (!lazyLoadedStaticLoot.TryGetValue(containerId, out StaticLootDetails lootContainer))
                         {
-                            _logger.Warning($"Container ID {containerId} not found in map {propertyMapName}");
+                            _logger.Warning($"[稀有收藏品重置版] Container ID {containerId} not found in map {propertyMapName}");
                             continue;
                         }
 
@@ -145,7 +147,9 @@ namespace TarkovRareCollectibles
                 });
             }
         }
-
+        /**
+         * AddToHallOfFame
+         */
         public void AddToHallOfFame(Dictionary<string, string> hallofFameData)
         {
             var hall1 = _database.Templates.Items[new MongoId("63dbd45917fff4dee40fe16e")];
@@ -175,7 +179,10 @@ namespace TarkovRareCollectibles
                 }
             }
         }
-
+        
+        /**
+         * 添加商人收购
+         */
         public void AddToTraderTrades(Dictionary<string, Dictionary<string, bool>> traderData)
         {
             foreach ((string itemId, Dictionary<string, bool> traderTradesData) in traderData)
@@ -203,7 +210,10 @@ namespace TarkovRareCollectibles
                 }
             }
         }
-
+        
+        /**
+         * 奖励池移除
+         */
         public void RemoveFromRewardPool(Dictionary<string, string> itemIdLookup)
         {
             ItemConfig itemConfig = _configServer.GetConfig<ItemConfig>();
@@ -214,6 +224,9 @@ namespace TarkovRareCollectibles
             }
         }
 
+        /**
+         * PMC 物资池移除
+         */
         public void RemoveFromPMCLootPool(Dictionary<string, string> itemIdLookup)
         {
             PmcConfig pmcConfig = _configServer.GetConfig<PmcConfig>();
@@ -226,14 +239,20 @@ namespace TarkovRareCollectibles
                 }
             }
         }
-
+    
+        /**
+         * 估算散落战利品概率
+         */
         private double EstimateLooseLootProbability(int totalSpawns, double totalRelativeProbability, double spawnChance)
         {
             double clampedChance = Math.Max(1e-6, Math.Min(spawnChance, 0.98));
             double perDrawProb = 1 - Math.Pow(1 - clampedChance, 1.0 / totalSpawns);
             return perDrawProb * totalRelativeProbability;
         }
-
+        
+        /**
+         * 制造散落的战利品刷新点
+         */
         private Spawnpoint CreateLooseLootSpawn(SpawnData spawnData)
         {
             var spawn = new Spawnpoint
@@ -269,6 +288,10 @@ namespace TarkovRareCollectibles
 
             return spawn;
         }
+        
+        /**
+         * 添加散落的战利品
+         */
         public void AddToLooseLoot(Dictionary<string, List<SpawnData>> looseLootData, double looseLootMultiplier)
         {
             var lootChangesByMap = new Dictionary<string, List<Spawnpoint>>();
@@ -305,13 +328,13 @@ namespace TarkovRareCollectibles
             {
                 if (!_database.Locations.GetDictionary().TryGetValue(propertyMapName, out Location location))
                 {
-                    _logger.Warning($"Map {propertyMapName} not found in database.");
+                    _logger.Warning($"[稀有收藏品重置版] Map {propertyMapName} not found in database.");
                     continue;
                 }
 
                 if (location.LooseLoot == null)
                 {
-                    _logger.Warning($"LooseLoot is null for {propertyMapName}");
+                    _logger.Warning($"[稀有收藏品重置版] LooseLoot is null for {propertyMapName}");
                     continue;
                 }
 

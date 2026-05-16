@@ -10,13 +10,13 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TarkovRareCollectibles")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("TarkovRareCollectiblesRemake")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.5.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.5")]
-[assembly: System.Reflection.AssemblyProductAttribute("TarkovRareCollectibles")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TarkovRareCollectibles")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.1.5.0")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.0+e82f1c8bc16260a8e61cfa8d10d6b6b92893c3f7")]
+[assembly: System.Reflection.AssemblyProductAttribute("TarkovRareCollectiblesRemake")]
+[assembly: System.Reflection.AssemblyTitleAttribute("TarkovRareCollectiblesRemake")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.2.0.0")]
 
 // 由 MSBuild WriteCodeFragment 类生成。
 

@@ -10,6 +10,10 @@ namespace TarkovRareCollectibles
     internal static class ConstantsContainer
     {
         // --- Container ID Lookup ---
+        
+        /**
+         * 容器ID一览表
+         */
         public static readonly Dictionary<string, string> containerLookup = new()
         {
             { "StupidBox", "566966cd4bdc2d0c4c8b4578" },
